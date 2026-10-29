@@ -1,0 +1,38 @@
+# ============================================================
+# .gitignore — dépôt « Livre d'or Cloud »
+# Règle : aucun secret, aucun state, aucun binaire de provider.
+# ============================================================
+
+# --- Terraform ---
+.terraform/
+**/.terraform/*
+*.tfstate
+*.tfstate.*
+*.tfstate.backup
+*.tfplan
+crash.log
+crash.*.log
+terraform.tfvars
+*.auto.tfvars
+override.tf
+override.tf.json
+*_override.tf
+# Rappel : .terraform.lock.hcl est VERSIONNÉ (il fige les versions des providers).
+
+# --- Kubernetes / Helm ---
+kubeconfig*
+*.kubeconfig
+*.tgz
+
+# --- Identifiants / secrets ---
+*-key.json
+service-account*.json
+.env
+.env.*
+
+# --- Système / IDE ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log
