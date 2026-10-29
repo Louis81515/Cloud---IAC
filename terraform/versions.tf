@@ -14,6 +14,12 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "~> 2.10" # module : >= 2.10, < 4
     }
+    # Provider requis par le module GKE (suffixe aléatoire du compte de service,
+    # choix des zones). Déclaré ici pour que required_providers soit exhaustif.
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
 }
 
