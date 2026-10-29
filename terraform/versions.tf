@@ -4,7 +4,7 @@ terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
-      version = "~> 8.0"    # module v46 (oct. 2026) : google >= 7.28, < 9
+      version = "~> 8.0" # module v46 (oct. 2026) : google >= 7.28, < 9
     }
     google-beta = {
       source  = "hashicorp/google-beta"
@@ -12,7 +12,7 @@ terraform {
     }
     kubernetes = {
       source  = "hashicorp/kubernetes"
-      version = "~> 2.10"   # module : >= 2.10, < 4
+      version = "~> 2.10" # module : >= 2.10, < 4
     }
   }
 }

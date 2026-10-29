@@ -1,0 +1,21 @@
+# terraform.tfvars.example — MODÈLE de valeurs d'entrée, versionné.
+# Le vrai fichier terraform.tfvars n'est PAS versionné (voir .gitignore) : il contient
+# l'ID du projet de la session de lab.
+#
+# Début de session :
+#   cp terraform.tfvars.example terraform.tfvars
+#   puis renseigner project_id et region avec les valeurs du panneau « Lab details ».
+
+project_id = "REMPLACER_PAR_LE_PROJECT_ID_DU_LAB" # ou : gcloud config get-value project
+region     = "us-central1" # région fournie par le panneau du lab
+
+# Les valeurs suivantes ont un default dans variables.tf ; à décommenter seulement
+# si la session impose une autre valeur.
+#
+# cluster_name        = "autopilot-cluster-1"
+# network             = "default"
+# subnetwork          = "default"
+# ip_range_pods       = null
+# ip_range_services   = null
+# release_channel     = "REGULAR"
+# deletion_protection = false
