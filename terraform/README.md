@@ -209,8 +209,11 @@ terraform plan
 ### 7.5 Destruction
 
 ```bash
-# Toujours désinstaller les releases Helm AVANT de détruire le cluster
-helm uninstall stack-dev stack-staging stack-prod -n ... # voir helm/README
+# Toujours désinstaller les releases Helm AVANT de détruire le cluster.
+# Une release par namespace : trois commandes distinctes.
+helm uninstall stack-dev -n dev
+helm uninstall stack-staging -n staging
+helm uninstall stack-prod -n prod
 terraform destroy          # ≈ 5-10 min
 ```
 
