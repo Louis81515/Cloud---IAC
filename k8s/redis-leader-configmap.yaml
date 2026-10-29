@@ -1,0 +1,17 @@
+# Configuration Redis du leader (fichier redis.conf), montée comme fichier dans le pod.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-leader-config
+  labels:
+    app.kubernetes.io/name: guestbook
+    app.kubernetes.io/instance: guestbook
+    app.kubernetes.io/component: redis-leader
+    app.kubernetes.io/part-of: livre-or-cloud
+data:
+  redis.conf: |
+    #point de montage
+    dir /data
+    #mode de persistance Chaque écriture est ajoutée à un journal on ne perd aucun message pour notre problematique
+    appendonly yes
+    appendfsync everysec
