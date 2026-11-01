@@ -1,0 +1,17 @@
+{{/* Service Kubernetes du Redis leader. */}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.redisLeader.service.name }}
+  labels:
+    {{- include "guestbook.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis-leader
+spec:
+  ports:
+    - name: redis
+      port: {{ .Values.redisLeader.service.port }}
+      targetPort: {{ .Values.redisLeader.service.targetPort }}
+      protocol: TCP
+  selector:
+    {{- include "guestbook.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: redis-leader

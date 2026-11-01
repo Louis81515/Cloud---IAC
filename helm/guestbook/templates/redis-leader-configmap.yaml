@@ -1,0 +1,13 @@
+{{/* Configuration du serveur Redis leader. */}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-leader-config
+  labels:
+    {{- include "guestbook.labels" . | nindent 4 }}
+data:
+  redis.conf: |
+    bind 0.0.0.0
+    protected-mode no
+    appendonly yes
+    dir /data

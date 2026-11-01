@@ -1,0 +1,6 @@
+apiVersion: v2
+name: guestbook
+description: Application Livre d'or avec frontend PHP et Redis
+type: application
+version: 0.1.0
+appVersion: "5.0"

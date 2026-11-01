@@ -1,0 +1,31 @@
+# Surcharges de l'environnement de recette.
+commonLabels:
+  environment: staging
+  team: plateforme
+
+# Configuration du frontend.
+frontend:
+  replicaCount: 2
+  service:
+    type: LoadBalancer
+    port: 8081
+  
+  resources:
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Configuration du Redis leader.
+redisLeader:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    size: 2Gi
+
+# Configuration des followers.
+redisFollower:
+  replicaCount: 2

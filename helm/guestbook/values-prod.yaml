@@ -1,0 +1,31 @@
+# Surcharges de l'environnement de production.
+commonLabels:
+  environment: prod
+  team: plateforme
+
+# Configuration du frontend.
+frontend:
+  replicaCount: 3
+  service:
+    type: LoadBalancer
+    port: 8082
+  
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+  
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+# Configuration du Redis leader.
+redisLeader:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    size: 5Gi
+
+# Configuration des followers.
+redisFollower:
+  replicaCount: 2

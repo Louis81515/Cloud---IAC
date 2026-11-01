@@ -1,0 +1,9 @@
+{{/* Configuration du frontend Guestbook. */}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  labels:
+    {{- include "guestbook.labels" . | nindent 4 }}
+data:
+  GET_HOSTS_FROM: {{ .Values.frontend.env.GET_HOSTS_FROM | quote }}

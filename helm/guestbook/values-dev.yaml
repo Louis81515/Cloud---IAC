@@ -1,0 +1,23 @@
+# Surcharges de l'environnement de développement.
+commonLabels:
+  environment: dev
+  team: plateforme
+
+# Configuration du frontend.
+frontend:
+  replicaCount: 2
+  
+  service:
+    type: LoadBalancer
+    port: 8080
+
+# Configuration du Redis leader.
+redisLeader:
+  replicaCount: 1
+  persistence:
+    enabled: true
+    size: 1Gi
+
+# Configuration des followers.
+redisFollower:
+  replicaCount: 1

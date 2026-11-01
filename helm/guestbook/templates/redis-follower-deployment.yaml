@@ -1,0 +1,50 @@
+{{/* Deployment des serveurs Redis followers. */}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis-follower
+  labels:
+    {{- include "guestbook.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis-follower
+spec:
+  replicas: {{ .Values.redisFollower.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "guestbook.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: redis-follower
+  template:
+    metadata:
+      labels:
+        {{- include "guestbook.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: redis-follower
+    spec:
+      containers:
+        - name: redis-follower
+          image: "{{ .Values.redisFollower.image.repository }}:{{ .Values.redisFollower.image.tag }}"
+          imagePullPolicy: {{ .Values.redisFollower.image.pullPolicy }}
+          command:
+            - redis-server
+          args:
+            - --replicaof
+            - redis-leader
+            - "6379"
+          ports:
+            - name: redis
+              containerPort: {{ .Values.redisFollower.service.targetPort }}
+              protocol: TCP
+          resources:
+            {{- toYaml .Values.redisFollower.resources | nindent 12 }}
+          readinessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            exec:
+              command:
+                - redis-cli
+                - ping
+            initialDelaySeconds: 15
+            periodSeconds: 10

@@ -1,0 +1,85 @@
+# Valeurs par défaut du chart Guestbook.
+
+# Labels communs aux ressources.
+commonLabels:
+  environment: dev
+  team: plateforme
+
+nameOverride: ""
+fullnameOverride: ""
+
+# Configuration du frontend PHP.
+frontend:
+  replicaCount: 2
+  image:
+    repository: gcr.io/google-samples/gb-frontend
+    tag: "v5"
+    pullPolicy: IfNotPresent
+  
+  service:
+    name: frontend
+    type: LoadBalancer
+    port: 80
+    targetPort: 80
+
+  # Variables d'environnement de l'application.
+  env:
+    GET_HOSTS_FROM: dns
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+  
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+# Configuration du Redis leader.
+redisLeader:
+  replicaCount: 1.
+  image:
+    repository: redis
+    tag: "7-alpine"
+    pullPolicy: IfNotPresent
+  
+  service:
+    name: redis-leader
+    port: 6379
+    targetPort: 6379
+
+  persistence:
+    enabled: true
+    size: 1Gi
+    accessMode: ReadWriteOnce
+    storageClass: ""
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+    limits:
+      cpu: 250m
+      memory: 256Mi
+
+# Configuration des Redis followers.
+redisFollower:
+  replicaCount: 1
+  image:
+    repository: redis
+    tag: "7-alpine"
+    pullPolicy: IfNotPresent
+  
+  service:
+    name: redis-follower
+    port: 6379
+    targetPort: 6379
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    
+    limits:
+      cpu: 250m
+      memory: 256Mi

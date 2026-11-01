@@ -1,0 +1,17 @@
+{{/* Service Kubernetes des Redis followers. */}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.redisFollower.service.name }}
+  labels:
+    {{- include "guestbook.labels" . | nindent 4 }}
+    app.kubernetes.io/component: redis-follower
+spec:
+  ports:
+    - name: redis
+      port: {{ .Values.redisFollower.service.port }}
+      targetPort: {{ .Values.redisFollower.service.targetPort }}
+      protocol: TCP
+  selector:
+    {{- include "guestbook.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: redis-follower
