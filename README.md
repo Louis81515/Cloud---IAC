@@ -353,46 +353,7 @@ helm get values stack-<env> -n <env>
 
 ---
 
-## 9. Limites connues et dette technique
 
-**Ce qui n'est pas prêt pour la production**
-
-- **Redis non répliqué côté écriture** : un seul leader, pas de sentinelle ni de cluster Redis.
-  Une perte du leader entraîne une indisponibilité le temps du redémarrage (les données, elles,
-  restent sur le volume).
-- **Pas de sauvegarde du volume** : une suppression du PVC (ou un `helm uninstall`) perd les
-  messages. Aucun snapshot planifié.
-- **HTTP sans TLS** : l'IP publique du Service est joignable en clair, sans nom de domaine ni
-  certificat.
-- **Pas de Secret** : Redis n'a pas de mot de passe (réseau interne uniquement), et aucun secret
-  n'est géré par le chart.
-- **Pas de haute disponibilité du frontend** au-delà des réplicas : pas de PodDisruptionBudget,
-  pas d'anti-affinité obligatoire.
-- **Un seul cluster** pour les trois environnements : `dev`, `staging` et `prod` sont des
-  namespaces, pas des clusters séparés.
-- **State Terraform local** : pas de backend distant, pas de verrou, pas de CI.
-
-**Dette technique à traiter en priorité**
-
-1. **Annotation `checksum/config` manquante** : modifier une ConfigMap ne redémarre pas les pods ;
-   le runbook 3 impose donc un `kubectl rollout restart` (voir [`docs/decisions/004`](docs/decisions/004-un-chart-plusieurs-envs.md)).
-2. **Divergence entre `k8s/` et le chart** : images différentes (`redis:6.0.5` +
-   `gb-redis-follower:v2` côté manifestes, `redis:7-alpine` côté chart) et probes/ressources
-   absentes du leader dans `k8s/`. Voir [`docs/decisions/006-k8s-et-helm.md`](docs/decisions/006-k8s-et-helm.md).
-3. **Labels incomplets dans le chart** : `app.kubernetes.io/version` et `app.kubernetes.io/part-of`
-   ne sont pas générés par `_helpers.tpl` ; le label de composant est écrit dans chaque template.
-4. **Noms d'objets fixes** (`frontend`, `redis-leader`, …) au lieu de `guestbook.fullname` : c'est
-   volontaire pour les Services (DNS imposé par l'image), moins pour les autres objets.
-5. **PVC non conservé** au `helm uninstall` : pas d'annotation `helm.sh/resource-policy: keep`.
-6. **Valeurs** : `values.yaml` n'est pas entièrement commenté (certaines clés d'images et de
-   persistance n'ont pas de commentaire).
-
-**Ce que nous ferions ensuite** : Redis Sentinel ou un Redis managé (Memorystore) pour la haute
-disponibilité, des sauvegardes de volume planifiées, un Ingress avec TLS (cert-manager), un
-Secret pour l'authentification Redis, un backend GCS pour le state Terraform et une CI qui
-exécute `terraform plan` et `helm lint` à chaque merge request.
-
----
 
 ## 10. Structure du dépôt
 
