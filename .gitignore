@@ -36,3 +36,6 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+
+# --- Copie accidentelle du dépôt à l'intérieur de lui-même ---
+Cloud---IAC/
