@@ -81,3 +81,18 @@ Justification : la readiness du frontend vérifie que la page est réellement se
 pas seulement que le port est ouvert ; la liveness utilise les mêmes seuils mais avec des délais
 plus longs pour éviter les redémarrages en cascade pendant un pic de charge. Pour Redis, `ping`
 vérifie que le processus répond à une commande, ce qu'un simple test TCP ne garantit pas.
+
+## Choix des ressources
+
+Les valeurs suivent la charge attendue de chaque environnement :
+
+- `dev` : un seul utilisateur, aucune contrainte — requêtes minimales (100m / 128Mi), limites à
+  2,5 fois pour absorber les pics de démarrage sans étranglement.
+- `staging` : dimensionné comme une préproduction, mémoire doublée (256Mi → 512Mi de limite) pour
+  valider un comportement proche de la production.
+- `prod` : trois frontends et deux followers ; requêtes plus hautes pour que la capacité soit
+  réservée et non dépendante du hasard de la planification.
+
+Les limites restent à 2 à 5 fois les requêtes : assez pour les pics, assez basses pour que
+l'orchestrateur puisse planifier plusieurs réplicas sur un même nœud. Sur GKE Autopilot, les
+requêtes inférieures aux minimums d'Autopilot sont arrondies à la hausse.
