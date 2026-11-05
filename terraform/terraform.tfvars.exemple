@@ -1,0 +1,3 @@
+# Copier ce fichier en terraform.tfvars puis remplacer les valeurs.
+project_id        = "ID-DU-PROJET-DU-LAB"
+ssh_source_ranges = ["TON.IP.PUBLIQUE/32"]
